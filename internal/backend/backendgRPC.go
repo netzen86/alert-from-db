@@ -28,6 +28,7 @@ type BackendServer struct {
 // AddFilm реализует интерфейс добавления фильма в хранилище.
 func (srv *BackendServer) AddFilm(ctx context.Context, in *pb.AddFilmRequest) (*pb.AddFilmResponse, error) {
 	var response pb.AddFilmResponse
+	var fs []films.Film
 	var err error
 
 	f := films.Film{Title: in.Film.Title, Director: in.Film.Directorr}
@@ -37,6 +38,16 @@ func (srv *BackendServer) AddFilm(ctx context.Context, in *pb.AddFilmRequest) (*
 		response.Error = fmt.Sprintf("addfilm: error when add film  %v", err)
 		return &response, err
 	}
+	fs, err = srv.storage.GetFilmsRepo(ctx)
+	if err != nil {
+		response.Error = fmt.Sprintf("addfilm: error when get films for resp  %v", err)
+		return &response, err
+	}
+
+	for _, film := range fs {
+		response.Films = append(response.Films, &pb.Film{Id: film.ID, Title: film.Title, Directorr: film.Director})
+	}
+
 	return &response, nil
 }
 

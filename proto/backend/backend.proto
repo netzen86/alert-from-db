@@ -16,7 +16,8 @@ message AddFilmRequest {
 }
 
 message AddFilmResponse {
-  string error = 1;
+  repeated Film films = 1;
+  string        error = 2;
 }
 
 message DelFilmRequest {
