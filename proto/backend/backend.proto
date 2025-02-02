@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package backend;
+
+option go_package = "alert-from-db/proto/backend";
+
+
+message Film {
+  int64  id        = 1;  
+  string title     = 2;   
+  string directorr = 3;           
+}
+
+message AddFilmRequest {
+  Film film = 1;
+}
+
+message AddFilmResponse {
+  Film film    = 1;
+  string error = 2;
+}
+
+message DelFilmRequest {
+  int64 id = 1;
+}
+
+message DelFilmResponse {
+  string error = 1;
+}
+
+message GetFilmsRequest {
+}
+
+message GetFilmsResponse {
+  repeated Film films = 1;
+  string  error       = 2;
+}
+
+service Metric {
+  rpc AddFilm(AddFilmRequest) returns (AddFilmResponse);
+  rpc DelFilm(DelFilmRequest) returns (DelFilmResponse);
+  rpc GetFilms(GetFilmsRequest) returns (GetFilmsResponse);
+}
