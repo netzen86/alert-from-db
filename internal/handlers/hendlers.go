@@ -22,7 +22,7 @@ func AddFilmHandle(f *[]films.Film, templates *template.Template, tmplname strin
 	return func(w http.ResponseWriter, r *http.Request) {
 		title := r.PostFormValue("title")
 		director := r.PostFormValue("director")
-		*f = append(*f, films.Film{ID: len(*f) + 1, Title: title, Director: director})
+		*f = append(*f, films.Film{Title: title, Director: director})
 		tmpl.RenderTemplate(w, templates, tmplname, *f)
 	}
 }
