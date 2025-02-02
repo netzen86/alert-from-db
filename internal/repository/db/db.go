@@ -12,17 +12,21 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-// DBStorage адрес для подключения к базе данных -  "postgres://postgres:collectmetrics@localhost/collectmetrics?sslmode=disable"
+const (
+	DBconstring string = "postgres://postgres:alert-from-db@localhost/alert-from-db?sslmode=disable"
+)
+
+// DBStorage адрес для подключения к базе данных
 type DBStorage struct {
 	DB          *sql.DB
 	DBconstring string
 }
 
 // NewDBStorage функция подключения к базе данных, param = строка для подключения к БД
-func NewDBStorage(ctx context.Context, param string) (*DBStorage, error) {
+func NewDBStorage(ctx context.Context, DBconstring string) (*DBStorage, error) {
 	var dbstorage DBStorage
 	var err error
-	dbstorage.DB, err = sql.Open("pgx", param)
+	dbstorage.DB, err = sql.Open("pgx", DBconstring)
 	if err != nil {
 		return nil, fmt.Errorf("cannot connect to data base %w", err)
 	}
