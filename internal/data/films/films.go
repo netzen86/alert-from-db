@@ -1,7 +1,7 @@
 package films
 
 type Film struct {
-	ID       int
+	ID       int64
 	Title    string
 	Director string
 }
