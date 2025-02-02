@@ -39,9 +39,7 @@ func main() {
 	log.Printf("!!! SERVER START at %v %v!!!\n", backend.EndpointRPC, backend.ProtoTCP)
 
 	// запуск gRPC сервера
-	go func() {
-		if err = gSRV.Serve(listen); err != nil {
-			log.Fatalf("error when run gRPC server %v", err)
-		}
-	}()
+	if err = gSRV.Serve(listen); err != nil {
+		log.Fatalf("error when run gRPC server %v", err)
+	}
 }
