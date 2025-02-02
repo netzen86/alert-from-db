@@ -1,0 +1,15 @@
+services:
+
+  db:
+    image: "docker.io/postgres:16.1-alpine3.18"
+    ports:
+      - "5432:5432"    
+    environment:
+      POSTGRES_DB: "alert-from-db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "alert-from-db"
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+
+volumes:
+  db_data:
