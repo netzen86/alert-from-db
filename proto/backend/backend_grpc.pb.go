@@ -19,177 +19,177 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Metric_AddFilm_FullMethodName  = "/backend.Metric/AddFilm"
-	Metric_DelFilm_FullMethodName  = "/backend.Metric/DelFilm"
-	Metric_GetFilms_FullMethodName = "/backend.Metric/GetFilms"
+	Backend_AddFilm_FullMethodName  = "/backend.Backend/AddFilm"
+	Backend_DelFilm_FullMethodName  = "/backend.Backend/DelFilm"
+	Backend_GetFilms_FullMethodName = "/backend.Backend/GetFilms"
 )
 
-// MetricClient is the client API for Metric service.
+// BackendClient is the client API for Backend service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type MetricClient interface {
+type BackendClient interface {
 	AddFilm(ctx context.Context, in *AddFilmRequest, opts ...grpc.CallOption) (*AddFilmResponse, error)
 	DelFilm(ctx context.Context, in *DelFilmRequest, opts ...grpc.CallOption) (*DelFilmResponse, error)
 	GetFilms(ctx context.Context, in *GetFilmsRequest, opts ...grpc.CallOption) (*GetFilmsResponse, error)
 }
 
-type metricClient struct {
+type backendClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewMetricClient(cc grpc.ClientConnInterface) MetricClient {
-	return &metricClient{cc}
+func NewBackendClient(cc grpc.ClientConnInterface) BackendClient {
+	return &backendClient{cc}
 }
 
-func (c *metricClient) AddFilm(ctx context.Context, in *AddFilmRequest, opts ...grpc.CallOption) (*AddFilmResponse, error) {
+func (c *backendClient) AddFilm(ctx context.Context, in *AddFilmRequest, opts ...grpc.CallOption) (*AddFilmResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AddFilmResponse)
-	err := c.cc.Invoke(ctx, Metric_AddFilm_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Backend_AddFilm_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *metricClient) DelFilm(ctx context.Context, in *DelFilmRequest, opts ...grpc.CallOption) (*DelFilmResponse, error) {
+func (c *backendClient) DelFilm(ctx context.Context, in *DelFilmRequest, opts ...grpc.CallOption) (*DelFilmResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DelFilmResponse)
-	err := c.cc.Invoke(ctx, Metric_DelFilm_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Backend_DelFilm_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *metricClient) GetFilms(ctx context.Context, in *GetFilmsRequest, opts ...grpc.CallOption) (*GetFilmsResponse, error) {
+func (c *backendClient) GetFilms(ctx context.Context, in *GetFilmsRequest, opts ...grpc.CallOption) (*GetFilmsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetFilmsResponse)
-	err := c.cc.Invoke(ctx, Metric_GetFilms_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Backend_GetFilms_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// MetricServer is the server API for Metric service.
-// All implementations must embed UnimplementedMetricServer
+// BackendServer is the server API for Backend service.
+// All implementations must embed UnimplementedBackendServer
 // for forward compatibility.
-type MetricServer interface {
+type BackendServer interface {
 	AddFilm(context.Context, *AddFilmRequest) (*AddFilmResponse, error)
 	DelFilm(context.Context, *DelFilmRequest) (*DelFilmResponse, error)
 	GetFilms(context.Context, *GetFilmsRequest) (*GetFilmsResponse, error)
-	mustEmbedUnimplementedMetricServer()
+	mustEmbedUnimplementedBackendServer()
 }
 
-// UnimplementedMetricServer must be embedded to have
+// UnimplementedBackendServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedMetricServer struct{}
+type UnimplementedBackendServer struct{}
 
-func (UnimplementedMetricServer) AddFilm(context.Context, *AddFilmRequest) (*AddFilmResponse, error) {
+func (UnimplementedBackendServer) AddFilm(context.Context, *AddFilmRequest) (*AddFilmResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddFilm not implemented")
 }
-func (UnimplementedMetricServer) DelFilm(context.Context, *DelFilmRequest) (*DelFilmResponse, error) {
+func (UnimplementedBackendServer) DelFilm(context.Context, *DelFilmRequest) (*DelFilmResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelFilm not implemented")
 }
-func (UnimplementedMetricServer) GetFilms(context.Context, *GetFilmsRequest) (*GetFilmsResponse, error) {
+func (UnimplementedBackendServer) GetFilms(context.Context, *GetFilmsRequest) (*GetFilmsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFilms not implemented")
 }
-func (UnimplementedMetricServer) mustEmbedUnimplementedMetricServer() {}
-func (UnimplementedMetricServer) testEmbeddedByValue()                {}
+func (UnimplementedBackendServer) mustEmbedUnimplementedBackendServer() {}
+func (UnimplementedBackendServer) testEmbeddedByValue()                 {}
 
-// UnsafeMetricServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to MetricServer will
+// UnsafeBackendServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BackendServer will
 // result in compilation errors.
-type UnsafeMetricServer interface {
-	mustEmbedUnimplementedMetricServer()
+type UnsafeBackendServer interface {
+	mustEmbedUnimplementedBackendServer()
 }
 
-func RegisterMetricServer(s grpc.ServiceRegistrar, srv MetricServer) {
-	// If the following call pancis, it indicates UnimplementedMetricServer was
+func RegisterBackendServer(s grpc.ServiceRegistrar, srv BackendServer) {
+	// If the following call pancis, it indicates UnimplementedBackendServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Metric_ServiceDesc, srv)
+	s.RegisterService(&Backend_ServiceDesc, srv)
 }
 
-func _Metric_AddFilm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Backend_AddFilm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddFilmRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MetricServer).AddFilm(ctx, in)
+		return srv.(BackendServer).AddFilm(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Metric_AddFilm_FullMethodName,
+		FullMethod: Backend_AddFilm_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MetricServer).AddFilm(ctx, req.(*AddFilmRequest))
+		return srv.(BackendServer).AddFilm(ctx, req.(*AddFilmRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Metric_DelFilm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Backend_DelFilm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DelFilmRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MetricServer).DelFilm(ctx, in)
+		return srv.(BackendServer).DelFilm(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Metric_DelFilm_FullMethodName,
+		FullMethod: Backend_DelFilm_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MetricServer).DelFilm(ctx, req.(*DelFilmRequest))
+		return srv.(BackendServer).DelFilm(ctx, req.(*DelFilmRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Metric_GetFilms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Backend_GetFilms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetFilmsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MetricServer).GetFilms(ctx, in)
+		return srv.(BackendServer).GetFilms(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Metric_GetFilms_FullMethodName,
+		FullMethod: Backend_GetFilms_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MetricServer).GetFilms(ctx, req.(*GetFilmsRequest))
+		return srv.(BackendServer).GetFilms(ctx, req.(*GetFilmsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Metric_ServiceDesc is the grpc.ServiceDesc for Metric service.
+// Backend_ServiceDesc is the grpc.ServiceDesc for Backend service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Metric_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "backend.Metric",
-	HandlerType: (*MetricServer)(nil),
+var Backend_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "backend.Backend",
+	HandlerType: (*BackendServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddFilm",
-			Handler:    _Metric_AddFilm_Handler,
+			Handler:    _Backend_AddFilm_Handler,
 		},
 		{
 			MethodName: "DelFilm",
-			Handler:    _Metric_DelFilm_Handler,
+			Handler:    _Backend_DelFilm_Handler,
 		},
 		{
 			MethodName: "GetFilms",
-			Handler:    _Metric_GetFilms_Handler,
+			Handler:    _Backend_GetFilms_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

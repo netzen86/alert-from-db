@@ -16,8 +16,7 @@ message AddFilmRequest {
 }
 
 message AddFilmResponse {
-  Film film    = 1;
-  string error = 2;
+  string error = 1;
 }
 
 message DelFilmRequest {
@@ -36,7 +35,7 @@ message GetFilmsResponse {
   string  error       = 2;
 }
 
-service Metric {
+service Backend {
   rpc AddFilm(AddFilmRequest) returns (AddFilmResponse);
   rpc DelFilm(DelFilmRequest) returns (DelFilmResponse);
   rpc GetFilms(GetFilmsRequest) returns (GetFilmsResponse);
