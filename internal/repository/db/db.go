@@ -72,7 +72,13 @@ func (dbstorage *DBStorage) CreateTables(ctx context.Context) error {
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 	stmtFilms := `CREATE TABLE IF NOT EXISTS films 
-	("id" SERIAL PRIMARY KEY, "title" TEXT UNIQUE, "director" TEXT)`
+	("id" SERIAL PRIMARY KEY, "title" TEXT UNIQUE, "director" TEXT); 
+	CREATE TABLE IF NOT EXISTS dep1 
+	("id" SERIAL PRIMARY KEY, "quarter" TEXT UNIQUE, 
+	"plan" integer, "planperc" decimal(5,4) constraint chk_dep1_planperc check (planperc between 0 and 100), 
+	"fackt" integer, "facktperc" decimal(5,4) constraint chk_dep1_facktperc check (facktperc between 0 and 100));
+	INSERT INTO dep1 (quarter)
+	VALUES ('1 квартал'),('2 квартал'),('3 квартал'),('4 квартал');`
 	_, err = dbstorage.DB.ExecContext(ctx, stmtFilms)
 	if err != nil {
 		return fmt.Errorf("create table error - %w", err)
