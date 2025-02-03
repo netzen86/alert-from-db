@@ -42,7 +42,8 @@ func (dbstorage *DBStorage) insertData(ctx context.Context, stmt string, inData 
 	var err error
 	switch inData := inData.(type) {
 	case films.Film:
-		_, err = dbstorage.DB.ExecContext(ctx, stmt, inData)
+		_, err = dbstorage.DB.ExecContext(ctx, stmt, inData.Title, inData.Director)
+		log.Println("SQL RES", err)
 		if err != nil {
 			return fmt.Errorf("insert in table error - %w", err)
 		}
@@ -53,12 +54,24 @@ func (dbstorage *DBStorage) insertData(ctx context.Context, stmt string, inData 
 	return nil
 }
 
+// функция для вставки данных в базу данных
+func (dbstorage *DBStorage) deleteData(ctx context.Context, stmt string, id int64) error {
+	var err error
+	_, err = dbstorage.DB.ExecContext(ctx, stmt, id)
+	log.Println("SQL RES", err)
+	if err != nil {
+		return fmt.Errorf("insert in table error - %w", err)
+	}
+
+	return nil
+}
+
 func (dbstorage *DBStorage) CreateTables(ctx context.Context) error {
 	var err error
 
 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
-	stmtFilms := `CREATE TABLE IF NOT EXISTS gauge 
+	stmtFilms := `CREATE TABLE IF NOT EXISTS films 
 	("id" SERIAL PRIMARY KEY, "title" TEXT UNIQUE, "director" TEXT)`
 	_, err = dbstorage.DB.ExecContext(ctx, stmtFilms)
 	if err != nil {
@@ -71,12 +84,13 @@ func (dbstorage *DBStorage) AddFilmRepo(ctx context.Context, f films.Film) error
 	stmtFilms := `
 	INSERT INTO films (title, director) 
 	VALUES ($1, $2)
-	ON CONFLICT (name) DO UPDATE 
-	  SET value = $2`
+	ON CONFLICT (title) DO UPDATE 
+	  SET director = $2`
 
 	err := dbstorage.insertData(ctx, stmtFilms, f)
 	if err != nil {
-		return fmt.Errorf("gauge %w", err)
+		log.Println(err)
+		return fmt.Errorf("addfilm %w", err)
 	}
 	return nil
 }
@@ -86,9 +100,9 @@ func (dbstorage *DBStorage) DelFilmRepo(ctx context.Context, id int64) error {
 	DELETE FROM films
 	WHERE id = $1;`
 
-	err := dbstorage.insertData(ctx, stmtFilms, id)
+	err := dbstorage.deleteData(ctx, stmtFilms, id)
 	if err != nil {
-		return fmt.Errorf("gauge %w", err)
+		return fmt.Errorf("delfilmrepo %w", err)
 	}
 	return nil
 }

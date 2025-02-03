@@ -3,6 +3,7 @@ package backend
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"alert-from-db/internal/data/films"
 	"alert-from-db/internal/repository/db"
@@ -31,11 +32,12 @@ func (srv *BackendServer) AddFilm(ctx context.Context, in *pb.AddFilmRequest) (*
 	var fs []films.Film
 	var err error
 
-	f := films.Film{Title: in.Film.Title, Director: in.Film.Directorr}
+	f := films.Film{Title: in.Film.Title, Director: in.Film.Director}
 
 	err = srv.storage.AddFilmRepo(ctx, f)
 	if err != nil {
 		response.Error = fmt.Sprintf("addfilm: error when add film  %v", err)
+		log.Println("AddFilm grpc", err)
 		return &response, err
 	}
 	fs, err = srv.storage.GetFilmsRepo(ctx)
@@ -45,7 +47,7 @@ func (srv *BackendServer) AddFilm(ctx context.Context, in *pb.AddFilmRequest) (*
 	}
 
 	for _, film := range fs {
-		response.Films = append(response.Films, &pb.Film{Id: film.ID, Title: film.Title, Directorr: film.Director})
+		response.Films = append(response.Films, &pb.Film{Id: film.ID, Title: film.Title, Director: film.Director})
 	}
 
 	return &response, nil
@@ -54,10 +56,22 @@ func (srv *BackendServer) AddFilm(ctx context.Context, in *pb.AddFilmRequest) (*
 // DelFilm реализует интерфейс добавления фильма в хранилище.
 func (srv *BackendServer) DelFilm(ctx context.Context, id *pb.DelFilmRequest) (*pb.DelFilmResponse, error) {
 	var response pb.DelFilmResponse
+	var fs []films.Film
+
 	err := srv.storage.DelFilmRepo(ctx, id.Id)
 	if err != nil {
 		response.Error = fmt.Sprintf("delfilm: error when del film  %v", err)
 		return &response, err
+	}
+
+	fs, err = srv.storage.GetFilmsRepo(ctx)
+	if err != nil {
+		response.Error = fmt.Sprintf("delfilm: error when get films for resp  %v", err)
+		return &response, err
+	}
+
+	for _, film := range fs {
+		response.Films = append(response.Films, &pb.Film{Id: film.ID, Title: film.Title, Director: film.Director})
 	}
 
 	return &response, nil
@@ -76,7 +90,7 @@ func (srv *BackendServer) GetFilms(ctx context.Context, in *pb.GetFilmsRequest) 
 	}
 
 	for _, f := range movies {
-		response.Films = append(response.Films, &pb.Film{Id: f.ID, Title: f.Title, Directorr: f.Director})
+		response.Films = append(response.Films, &pb.Film{Id: f.ID, Title: f.Title, Director: f.Director})
 	}
 	return &response, err
 }

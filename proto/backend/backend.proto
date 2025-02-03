@@ -6,9 +6,9 @@ option go_package = "alert-from-db/proto/backend";
 
 
 message Film {
-  int64  id        = 1;  
-  string title     = 2;   
-  string directorr = 3;           
+  int64  id       = 1;  
+  string title    = 2;   
+  string director = 3;           
 }
 
 message AddFilmRequest {
@@ -25,7 +25,8 @@ message DelFilmRequest {
 }
 
 message DelFilmResponse {
-  string error = 1;
+  repeated Film films = 1;
+  string error = 2;
 }
 
 message GetFilmsRequest {
